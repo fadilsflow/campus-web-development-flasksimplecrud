@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask CRUD</title>
+    <style>
+        .alert { padding: 10px; margin: 10px 0; border: 1px solid transparent; border-radius: 4px; }
+        .alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+        .alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>CRUD Application</h1>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Data Table -->
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>
+                <form action="{{ url_for('delete', id=item.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+                <!-- Example of update -->
+                <a href="{{ url_for('update', id=item.id) }}">Update</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Form for adding new data -->
+    <form action="{{ url_for('create') }}" method="post">
+        <input type="text" name="name" placeholder="Name" required>
+        <textarea name="description" placeholder="Description" required></textarea>
+        <button type="submit">Add Record</button>
+    </form>
+</body>
+</html>
